@@ -1,4 +1,4 @@
-# Backend Guide
+# n8n Guide
 
 ## Overview
 This guide provides information about the backend implementation, including n8n API integrations and authentication.
@@ -107,6 +107,12 @@ Example request body:
 }
 ```
 
+Note: When creating a new prompt, it will:
+1. Update all existing prompts with the same `platform_id` and `category_id` to `is_active = false`
+2. Increment the version number of the new prompt by +0.01
+3. This version number serves as an indicator/flag for the active prompt for the platform
+4. No database updates are performed - new prompts are created rather than updating existing ones
+
 ## Implementation Notes
 
 1. All API calls should include Basic Authentication headers
@@ -114,26 +120,32 @@ Example request body:
 3. Rate limiting and caching strategies should be considered
 4. API responses should be validated before processing
 
-## Security Considerations
+## Additional Endpoints
 
-1. Never expose API credentials in client-side code
-2. Implement proper error handling for authentication failures
-3. Consider implementing request rate limiting
-4. Validate all API responses before processing
+### Keywords Generation
+**POST** `https://myalyai.app.n8n.cloud/webhook/keywords`
 
-## Error Handling
+Required fields in request body:
+- `prompt_id`: Prompt identifier
+- `product_description`: Description of the product
+- `session_id`: Unique key for LLM memory/conversation tracking
 
-The backend should handle the following common error scenarios:
-- Authentication failures
-- Network timeouts
-- Invalid query parameters
-- Rate limiting
-- Server errors
+Example request body:
+```json
+{
+  "prompt_id": 2,
+  "product_description": "anime keychain",
+  "session_id": "unique_key"
+}
+```
 
-## Best Practices
+Sample Response:
+```json
+{
+    "status": true,
+    "output": "3D printed anime keychain, custom anime keychain, handmade anime accessory, personalized manga keychain....",
+    "prompt": "You are an SEO expert specializing in Etsy marketplace optimization for 3D printed products. Generate a list of 15-20 highly relevant, SEO-optimized keywords for the following 3D printed product: anime keychain. Focus on keywords that Etsy shoppers would use to find this type of item. Include a mix of short-tail and long-tail keywords. Prioritize keywords that highlight the handmade, unique nature of the item, as Etsy shoppers value these qualities. Format your response as a comma-separated list with no numbering or bullets."
+}
+```
 
-1. Use environment variables for API credentials
-2. Implement proper logging for debugging
-3. Cache responses when appropriate
-4. Implement retry mechanisms for failed requests
-5. Validate all input parameters 
+Note: The `session_id` is used for LLM memory to maintain conversation context, which is useful for future interactions.
