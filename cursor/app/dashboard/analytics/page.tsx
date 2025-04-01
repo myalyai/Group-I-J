@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   ChartBarIcon, 
   DocumentTextIcon, 
@@ -13,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function AnalyticsDashboard() {
+  const router = useRouter();
   const [timeframe, setTimeframe] = useState('week');
 
   // Example data - in a real app, this would come from your API/database
@@ -51,6 +53,30 @@ export default function AnalyticsDashboard() {
     { name: "Keywords", count: 5234, percentage: 45 },
     { name: "Product Listings", count: 3421, percentage: 30 },
     { name: "Descriptions", count: 2888, percentage: 25 }
+  ];
+
+  // Quick Actions section with working buttons
+  const quickActions = [
+    { 
+      name: "View Reports", 
+      icon: ChartBarIcon,
+      action: () => router.push('/dashboard/reports')
+    },
+    { 
+      name: "Manage Prompts", 
+      icon: CommandLineIcon,
+      action: () => router.push('/dashboard/prompts')
+    },
+    { 
+      name: "Export Data", 
+      icon: DocumentTextIcon,
+      action: () => router.push('/dashboard/export')
+    },
+    { 
+      name: "Performance Metrics", 
+      icon: ArrowTrendingUpIcon,
+      action: () => router.push('/dashboard/performance')
+    }
   ];
 
   return (
@@ -114,22 +140,20 @@ export default function AnalyticsDashboard() {
             </div>
           </div>
 
-          {/* Quick Actions */}
+          {/* Updated Quick Actions Section */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
             <div className="space-y-3">
-              {[
-                { name: "View Reports", icon: ChartBarIcon },
-                { name: "Manage Prompts", icon: CommandLineIcon },
-                { name: "Export Data", icon: DocumentTextIcon },
-                { name: "Performance Metrics", icon: ArrowTrendingUpIcon }
-              ].map((action) => (
+              {quickActions.map((action) => (
                 <button
                   key={action.name}
-                  className="w-full flex items-center space-x-3 p-3 rounded-lg bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-200"
+                  onClick={action.action}
+                  className="w-full flex items-center space-x-3 p-3 rounded-lg bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-200 group"
                 >
-                  <action.icon className="w-5 h-5" />
-                  <span>{action.name}</span>
+                  <action.icon className="w-5 h-5 group-hover:text-purple-400 transition-colors" />
+                  <span className="group-hover:translate-x-0.5 transition-transform">
+                    {action.name}
+                  </span>
                 </button>
               ))}
             </div>
