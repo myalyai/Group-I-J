@@ -33,9 +33,9 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white h-full flex flex-col shadow-xl relative overflow-hidden">
+    <div className="w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen flex flex-col shadow-xl relative overflow-hidden fixed left-0">
       <div className="absolute inset-0 bg-[url('/subtle-pattern.png')] opacity-10"></div>
-      <div className="relative z-10">
+      <div className="relative z-10 h-full flex flex-col">
         <div className="p-6 border-b border-gray-800/50">
           <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-white">
             Admin Dashboard
@@ -66,7 +66,7 @@ export default function Sidebar() {
             )
           })}
         </nav>
-        <div className="p-4 border-t border-gray-800/50">
+        <div className="p-4 mt-auto border-t border-gray-800/50">
           <button
             onClick={handleLogout}
             className="w-full flex items-center px-4 py-3 rounded-lg transition-all duration-300 text-gray-300 hover:bg-white/5 hover:text-white hover:translate-x-1"
