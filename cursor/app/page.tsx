@@ -6,6 +6,8 @@ import type { Platform } from '@/types/platform'
 import type { Category } from '@/types/category'
 import type { Prompt } from '@/types/prompt'
 import { webhookConfig } from '@/config/webhook'
+import Loading from '@/components/Loading'
+import KeywordsResult from '@/components/KeywordsResult'
 
 export default function LandingPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
@@ -121,9 +123,7 @@ export default function LandingPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="text-white">Loading...</div>
-      </div>
+      <Loading/>
     )
   }
 
@@ -227,16 +227,7 @@ export default function LandingPage() {
               )}
             </button>
 
-            {result && (
-              <div className="mt-6 p-4 bg-gray-900 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">
-                  Generated  {selectedCategory?.name}:
-                </h3>
-                <pre className="text-sm text-white whitespace-pre-wrap">
-                  {result}
-                </pre>
-              </div>
-            )}
+            {result && <KeywordsResult result={result} category={selectedCategory?.name} />}
           </div>
         </div>
       </div>

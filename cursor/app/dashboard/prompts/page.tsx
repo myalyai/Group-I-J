@@ -8,6 +8,8 @@ import type { Category } from '@/types/category'
 import type { Prompt } from '@/types/prompt'
 import type { Model } from '@/types/model'
 import { webhookConfig } from '@/config/webhook'
+import Loading from '@/components/Loading'
+import TestResult from '@/components/TestResult'
 
 export default function PromptsPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
@@ -276,7 +278,7 @@ export default function PromptsPage() {
       if (!data.output) {
         throw new Error('No output received from the webhook')
       }
-
+      console.log(data)
       setTestResult(data.output)
     } catch (err) {
       console.error('Error testing prompt:', err)
@@ -289,9 +291,7 @@ export default function PromptsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-white">Loading...</div>
-      </div>
+      <Loading/>
     )
   }
 
@@ -302,7 +302,6 @@ export default function PromptsPage() {
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -484,10 +483,7 @@ export default function PromptsPage() {
 
                   {testResult && (
                     <div className="mt-4 p-4 bg-gray-900 rounded-lg">
-                      <h3 className="text-sm font-medium text-gray-400 mb-2">Test Result:</h3>
-                      <pre className="text-sm text-white whitespace-pre-wrap">
-                        {testResult}
-                      </pre>
+                      <TestResult testResult={testResult} />
                     </div>
                   )}
                 </div>
