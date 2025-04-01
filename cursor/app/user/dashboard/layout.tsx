@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import UserSidebar from '@/components/UserSidebar'
+import Loading from '@/components/Loading'
 
 export default function UserDashboardLayout({
   children,
@@ -22,9 +23,7 @@ export default function UserDashboardLayout({
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white">Loading...</div>
-      </div>
+      <Loading/>
     )
   }
 

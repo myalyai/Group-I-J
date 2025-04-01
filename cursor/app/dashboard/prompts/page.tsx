@@ -8,6 +8,7 @@ import type { Category } from '@/types/category'
 import type { Prompt } from '@/types/prompt'
 import type { Model } from '@/types/model'
 import { webhookConfig } from '@/config/webhook'
+import Loading from '@/components/Loading'
 
 export default function PromptsPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
@@ -289,9 +290,7 @@ export default function PromptsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-white">Loading...</div>
-      </div>
+      <Loading/>
     )
   }
 

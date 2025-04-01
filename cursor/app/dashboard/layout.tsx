@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Sidebar from '@/components/Sidebar'
+import Loading from '@/components/Loading'
 
 export default function DashboardLayout({
   children,
@@ -21,9 +22,7 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white">Loading...</div>
-      </div>
+      <Loading/>
     )
   }
 
