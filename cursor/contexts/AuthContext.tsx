@@ -9,6 +9,7 @@ type AuthContextType = {
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
+  signUp: (email: string, password: string) => Promise<void>  // Add this line
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
@@ -53,8 +54,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (error) throw error
   }
 
+  const signUp = async (email: string, password: string) => {
+    try {
+      // Email validation
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      if (!emailRegex.test(email)) {
+        throw new Error('Please enter a valid email address')
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email: email.toLowerCase().trim(),
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/user/dashboard`, // Fix the redirect URL
+          data: {
+            role: 'user'
+          }
+        }
+      })
+      
+      if (error) {
+        console.error('Signup error:', error)
+        throw new Error(error.message)
+      }
+      
+      if (data?.user?.identities?.length === 0) {
+        throw new Error('This email is already registered')
+      }
+
+      // Remove the return statement since we declared Promise<void>
+    } catch (error: any) {
+      console.error('Detailed signup error:', error)
+      throw error
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut, signUp }}>
       {children}
     </AuthContext.Provider>
   )
@@ -62,4 +98,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useAuth = () => {
   return useContext(AuthContext)
-} 
+}

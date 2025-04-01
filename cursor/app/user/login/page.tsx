@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 
-export default function LoginPage() {
+export default function UserLoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -15,7 +15,7 @@ export default function LoginPage() {
     e.preventDefault()
     try {
       await signIn(email, password)
-      router.push('/dashboard')
+      router.push('/user/dashboard')
     } catch (error) {
       setError('Invalid login credentials')
     }
@@ -26,7 +26,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8 p-8 bg-gray-800 rounded-lg">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-            Admin Sign in to your account
+            User Sign In
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -45,7 +45,7 @@ export default function LoginPage() {
               <input
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full  mt-3 px-3 py-2 border border-gray-700 placeholder-gray-500 text-white rounded-b-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-gray-700"
+                className="appearance-none rounded-none relative block w-full mt-3 px-3 py-2 border border-gray-700 placeholder-gray-500 text-white rounded-b-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-gray-700"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -69,4 +69,4 @@ export default function LoginPage() {
       </div>
     </div>
   )
-} 
+}
