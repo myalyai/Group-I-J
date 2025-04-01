@@ -29,7 +29,6 @@ const tooltips: { [key: string]: Tooltip } = {
 import { useAuth } from '@/contexts/AuthContext'
 
 export default function NewProductPage() {
-  // Add this line to get the current user
   const { user } = useAuth()
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -110,21 +109,21 @@ export default function NewProductPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-10 border border-gray-700/50">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-white">
+    <div className="max-w-3xl mx-auto px-3 py-8">
+      <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl shadow-xl p-8 border border-gray-700/50">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-white">
             Create New Product
           </h1>
-          <p className="text-gray-400 mt-2">
+          <p className="text-gray-400 text-sm mt-2">
             Fill in the details below to submit your 3D print product
           </p>
-          <p className="text-purple-400 text-sm mt-1">
-            Note: You must provide either a product description or an STL file URL (or both).
+          <p className="text-purple-400 text-xs mt-1">
+            Note: You must provide either a product description or an STL file URL.
           </p>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
               <label htmlFor="platform" className="text-base font-medium text-gray-200">
@@ -211,13 +210,14 @@ export default function NewProductPage() {
             `}</style>
           </div>
 
+          {/* Description textarea - increase rows from 3 to 4 */}
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="description" className="text-base font-medium text-gray-200">
+              <label htmlFor="description" className="text-sm font-medium text-gray-200">
                 Product Description
               </label>
               <QuestionMarkCircleIcon
-                className="h-5 w-5 text-purple-400 hover:text-purple-300 transition-colors cursor-help"
+                className="h-4 w-4 text-purple-400 hover:text-purple-300 transition-colors cursor-help"
                 onMouseEnter={() => setActiveTooltip('description')}
                 onMouseLeave={() => setActiveTooltip(null)}
               />
@@ -230,21 +230,22 @@ export default function NewProductPage() {
             )}
             <textarea
               id="description"
-              rows={5}
+              rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 block w-full rounded-xl px-4 py-3 bg-gray-700/50 border-2 border-gray-600 text-white shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500/20 focus:ring-opacity-50 transition-all duration-200 resize-none"
+              className="mt-1 block w-full rounded-lg px-3 py-3 bg-gray-700/50 border-2 border-gray-600 text-white shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500/20 focus:ring-opacity-50 transition-all duration-200 resize-none text-sm"
               placeholder="Enter your product description"
             />
           </div>
 
+          {/* STL URL input - with slightly more padding */}
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="stlUrl" className="text-base font-medium text-gray-200">
+              <label htmlFor="stlUrl" className="text-sm font-medium text-gray-200">
                 STL File URL
               </label>
               <QuestionMarkCircleIcon
-                className="h-5 w-5 text-purple-400 hover:text-purple-300 transition-colors cursor-help"
+                className="h-4 w-4 text-purple-400 hover:text-purple-300 transition-colors cursor-help"
                 onMouseEnter={() => setActiveTooltip('stlUrl')}
                 onMouseLeave={() => setActiveTooltip(null)}
               />
@@ -260,27 +261,28 @@ export default function NewProductPage() {
               id="stlUrl"
               value={stlUrl}
               onChange={(e) => setStlUrl(e.target.value)}
-              className="mt-1 block w-full rounded-xl px-4 py-3 bg-gray-700/50 border-2 border-gray-600 text-white shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500/20 focus:ring-opacity-50 transition-all duration-200"
+              className="mt-1 block w-full rounded-lg px-3 py-3 bg-gray-700/50 border-2 border-gray-600 text-white shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500/20 focus:ring-opacity-50 transition-all duration-200 text-sm"
               placeholder="https://example.com/your-stl-file.stl"
             />
           </div>
 
+          {/* Error message */}
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/50 text-red-200">
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/50 text-red-200 text-sm">
               {error}
             </div>
           )}
 
-          <div className="flex justify-end pt-4">
-            {/* Update the submit button's disabled condition */}
+          {/* Submit button - slightly larger */}
+          <div className="flex justify-end pt-3">
             <button
               type="submit"
               disabled={submitting || !selectedPlatform || (description.trim() === '' && stlUrl.trim() === '')}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-xl hover:from-purple-700 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium shadow-lg shadow-purple-500/20"
+              className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-lg hover:from-purple-700 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium shadow-md shadow-purple-500/20 text-sm"
             >
               {submitting ? (
                 <span className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
