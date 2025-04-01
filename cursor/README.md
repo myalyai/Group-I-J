@@ -158,5 +158,55 @@ The application can be deployed on any platform that supports Next.js applicatio
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
 
+###Todo::
+``` 
+Admin Access & Security
+
+Create a separate admin login with enhanced security - done
+Admin credentials must be separate from regular user accounts - only user now is admin
+Implement role-based access control to restrict prompt management to admins only - only user now is admin
+Include IP restriction options for additional security - to do
+
+Complete Prompt Editing
+Full text editor for modifying all prompt templates - done
+Ability to adjust every aspect of the prompt text - done
+Support for formatting, variables, and conditional logic - need polishing
+Preview functionality to see how prompts will render - done
+
+Parameter Control
+Adjustment of API parameters (temperature, max tokens, etc.) - done
+Platform-specific settings for each marketplace done
+Content type settings (keywords vs. listings) - done
+Default parameter presets with the ability to save custom configurations - done
+
+Testing Environment
+Test prompts before publishing changes - need polishing
+Sample outputs with different product inputs - need polishing
+A/B testing capabilities for comparing prompt effectiveness - to do
+Performance metrics for prompt evaluation - to do
+
+1. Logic Editor
+Interface for defining how different inputs affect prompt selection
+Rules-based system for handling various product types
+Customizable preprocessing logic for STL URLs
+Decision tree visualization for complex logic flows
+
+2. Variable Management
+Define and manage custom variables used in prompts -- done
+Create reusable prompt components - done
+Control how user inputs are processed and inserted into prompts -- done
+Format specifications for variable rendering -- done
+
+3. Platform-Specific Rules
+Customize rules for each marketplace independently -- done
+Define platform-specific optimizations -- done
+Set up specialized handling for different product categories -- done
+Marketplace trend adaptations -- to do
+
+4. Analytics Integration
+Track prompt performance metrics -- to do
+Compare different prompt versions -- no comparing yet, its just going to the newest version
+User satisfaction reporting -- to do
+Key performance indicators for optimization -- to do
+```
