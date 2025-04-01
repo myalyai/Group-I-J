@@ -210,3 +210,14 @@ Compare different prompt versions -- no comparing yet, its just going to the new
 User satisfaction reporting -- to do
 Key performance indicators for optimization -- to do
 ```
+
+
+###Main features TO DO::
+
+```
+As for the main features left items are:
+
+users login and dashboard (currently we only have admin)
+STL File submission
+MCP integration for marketplace trend adaptions
+```
