@@ -7,12 +7,14 @@ import {
   DocumentTextIcon,
   UserIcon,
   ArrowLeftOnRectangleIcon,
+  PlusCircleIcon, // Add this import
 } from '@heroicons/react/24/outline'
 import { useAuth } from '@/contexts/AuthContext'
 
 const navigation = [
   { name: 'Dashboard', href: '/user/dashboard', icon: HomeIcon },
   { name: 'My Listings', href: '/user/dashboard/listings', icon: DocumentTextIcon },
+  { name: 'New Product', href: '/user/dashboard/new-product', icon: PlusCircleIcon }, // Add this line
   { name: 'Profile', href: '/user/dashboard/profile', icon: UserIcon },
 ]
 
