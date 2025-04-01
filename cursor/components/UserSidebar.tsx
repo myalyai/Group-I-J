@@ -29,45 +29,50 @@ export default function UserSidebar() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-900 w-64 px-4 py-8">
-      <div className="flex items-center mb-8">
-        <h1 className="text-xl font-bold text-white">User Dashboard</h1>
-      </div>
-      <nav className="flex-1 space-y-1">
-        {navigation.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`${
-                isActive
-                  ? 'bg-purple-600 text-white'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-              } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
-            >
-              <item.icon
-                className={`${
-                  isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
-                } mr-3 flex-shrink-0 h-6 w-6`}
-                aria-hidden="true"
-              />
-              {item.name}
-            </Link>
-          )
-        })}
-      </nav>
-      <div className="mt-auto pt-4 border-t border-gray-800">
-        <button
-          onClick={handleLogout}
-          className="w-full group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-800 hover:text-white"
-        >
-          <ArrowLeftOnRectangleIcon
-            className="mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-white"
-            aria-hidden="true"
-          />
-          Logout
-        </button>
+    <div className="w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white h-full flex flex-col shadow-xl relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('/subtle-pattern.png')] opacity-10"></div>
+      <div className="relative z-10">
+        <div className="p-6 border-b border-gray-800/50">
+          <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-white">
+            User Dashboard
+          </h1>
+        </div>
+        <nav className="flex-1 p-4 space-y-2">
+          {navigation.map((item) => {
+            const isActive = pathname === item.href
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`flex items-center px-4 py-3 rounded-lg transition-all duration-300 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-900/20'
+                    : 'text-gray-300 hover:bg-white/5 hover:text-white hover:translate-x-1'
+                }`}
+              >
+                <item.icon
+                  className={`mr-3 h-5 w-5 ${
+                    isActive ? 'text-white' : 'text-purple-300'
+                  }`}
+                  aria-hidden="true"
+                />
+                <span>{item.name}</span>
+              </Link>
+            )
+          })}
+        </nav>
+        <div className="p-4 border-t border-gray-800/50">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center px-4 py-3 rounded-lg transition-all duration-300 text-gray-300 hover:bg-white/5 hover:text-white hover:translate-x-1"
+          >
+            <ArrowLeftOnRectangleIcon
+              className="mr-3 h-5 w-5 text-purple-300"
+              aria-hidden="true"
+            />
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   )
