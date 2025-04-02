@@ -150,4 +150,37 @@ Sample Response:
 
 Note: The `session_id` is used for LLM memory to maintain conversation context, which is useful for future interactions.
 
+### Description Generation
+**POST** `https://myalyai.app.n8n.cloud/webhook/generate-description`
+
+Required fields in request body:
+- `base_64_image`: Base64 encoded PNG image of the 3D model
+
+Example request body:
+```json
+{
+  "base_64_image": "iVBORw0KGgoAAAANSUhEUgA..."
+}
+```
+
+Sample Response:
+```json
+{
+  "status": true,
+  "description": "Mint Green Tote Bag"
+}
+```
+
+Note: The endpoint only accepts PNG files.
+
+## Implementation Flow
+
+1. User uploads .STL file
+2. File is rendered using ThreeJS with adjustable view/angle
+3. HTML2Canvas captures screenshot of the rendered element and converts to PNG
+4. PNG is converted to base64
+5. Base64 image is sent to `/generate-description` endpoint
+6. Generated description is used to call `/keywords` endpoint
+7. System returns SEO optimized keywords/listing
+
 
