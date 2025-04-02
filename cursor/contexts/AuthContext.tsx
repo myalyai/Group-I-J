@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { User, AuthError, Session } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js'
 
 type AuthContextType = {
   user: User | null;
@@ -15,6 +16,20 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+
+// Create a supabase admin client with service role key for admin operations
+const adminSupabase = typeof window !== 'undefined' 
+  ? null // Don't create admin client in browser
+  : createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -127,17 +142,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getAllUsers = async () => {
     try {
-      const { data: users, error } = await supabase
-        .from('users') // Make sure you have a users table in Supabase
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching users:', error);
-        throw error;
+      // Get the current user's session to get the access token
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error('Not authenticated');
       }
-
-      return users || [];
+      
+      // Check if the user has admin role in their metadata
+      const userRole = session.user.user_metadata?.role;
+      console.log('Current user:', session.user.email);
+      console.log('Current user role:', userRole);
+      console.log('Full user metadata:', JSON.stringify(session.user.user_metadata, null, 2));
+      
+      if (userRole !== 'admin') {
+        throw new Error('Unauthorized: Only admins can view all users');
+      }
+      
+      // Use the API route instead of direct Supabase query
+      const response = await fetch('/api/admin/users', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch users');
+      }
+      
+      const users = await response.json();
+      return users;
     } catch (error) {
       console.error('Error in getAllUsers:', error);
       throw error;

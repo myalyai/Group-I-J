@@ -15,6 +15,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [selectedRole, setSelectedRole] = useState('all');
 
   useEffect(() => {
@@ -23,19 +24,22 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const data = await getAllUsers();
       setUsers(data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching users:', error);
+      setError(error.message || 'Failed to load users');
+      setUsers([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // Update the filteredUsers function to only filter by search
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesRole = selectedRole === 'all' || user.role === selectedRole;
-    return matchesSearch && matchesRole;
+    return user.email.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   return (
@@ -43,15 +47,28 @@ export default function UsersPage() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <h1 className="text-2xl font-bold text-white">User Management</h1>
-          <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-            Add New User
+          <div>
+            <h1 className="text-2xl font-bold text-white">User Management</h1>
+            <p className="text-gray-400 mt-1">Manage regular users of the platform</p>
+          </div>
+          <button 
+            onClick={fetchUsers}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Refresh Users
           </button>
         </div>
 
+        {/* Error message */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/50 text-red-200 p-4 rounded-lg">
+            {error}
+          </div>
+        )}
+
         {/* Filters */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="relative">
+          <div className="relative max-w-md">
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
@@ -137,4 +154,4 @@ export default function UsersPage() {
       </div>
     </div>
   );
-} 
+}
