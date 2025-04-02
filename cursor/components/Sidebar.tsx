@@ -1,32 +1,35 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   LayoutDashboard,
-  MessageSquareText,
-  Users,
   Settings,
-  BarChart2,
-  LogOut
+  Users,
+  MessageSquare,
+  LogOut,
+  Database
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
 const navigation = [
-  { name: 'Home', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Prompt Management', href: '/dashboard/prompts', icon: MessageSquareText },
-  { name: 'User Management', href: '/dashboard/users', icon: Users },
-  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart2 },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Prompts', href: '/dashboard/prompts', icon: MessageSquare },
+  { name: 'Users', href: '/dashboard/users', icon: Users },
+  { name: 'Platforms', href: '/dashboard/platforms', icon: Database },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 
 export default function Sidebar() {
   const pathname = usePathname()
   const { signOut } = useAuth()
+  const router = useRouter()
 
   const handleLogout = async () => {
     try {
       await signOut()
+      // Explicitly redirect to login page after logout
+      router.push('/login')
     } catch (error) {
       console.error('Error logging out:', error)
     }

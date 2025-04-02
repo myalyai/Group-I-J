@@ -1,6 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+import Loading from '@/components/Loading'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Sidebar from '@/components/Sidebar'
 
@@ -9,7 +13,26 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user, loading } = useAuth()
+  const router = useRouter()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  useEffect(() => {
+    // If not loading and no user is found, redirect to login page
+    if (!loading && !user) {
+      router.push('/login')
+    }
+  }, [user, loading, router])
+
+  // Show loading state
+  if (loading) {
+    return <Loading />
+  }
+
+  // Redirect if not authenticated
+  if (!user) {
+    return null
+  }
 
   return (
     <div className="relative min-h-screen bg-gray-900">
@@ -23,7 +46,7 @@ export default function DashboardLayout({
           >
             <Bars3Icon className="w-6 h-6" />
           </button>
-          <h1 className="text-lg font-semibold text-white">Dashboard</h1>
+          <h1 className="text-lg font-semibold text-white">Admin Dashboard</h1>
           <div className="w-8" /> {/* Spacer for centering */}
         </div>
       </div>
@@ -47,7 +70,7 @@ export default function DashboardLayout({
           <div className="fixed inset-y-0 left-0 w-64 z-50 lg:hidden">
             <div className="h-full bg-gray-900 border-r border-gray-800 shadow-xl">
               <div className="flex items-center justify-between p-4 border-b border-gray-800">
-                <h2 className="text-lg font-semibold text-white">Dashboard</h2>
+                <h2 className="text-lg font-semibold text-white">Admin Dashboard</h2>
                 <button
                   onClick={() => setIsSidebarOpen(false)}
                   className="p-2 rounded-lg bg-gray-800 text-gray-200 hover:bg-gray-700 transition-colors"
@@ -63,11 +86,11 @@ export default function DashboardLayout({
       )}
 
       {/* Main Content */}
-      <main className="lg:pl-64">
-        <div className="min-h-screen">
+      <div className="lg:pl-64">
+        <main className="p-6">
           {children}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
-  );
-} 
+  )
+}

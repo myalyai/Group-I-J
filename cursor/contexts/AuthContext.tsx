@@ -7,10 +7,11 @@ import { User, AuthError, Session } from "@supabase/supabase-js";
 type AuthContextType = {
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, role?: string) => Promise<void>;
   signOut: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   getAllUsers: () => Promise<any[]>;
+  userRole: string | null;
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -18,21 +19,36 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+        const { data: { session } } = await supabase.auth.getSession();
         setUser(session?.user ?? null);
+        
+        // Set user role from metadata if available
+        if (session?.user) {
+          const role = session.user.user_metadata?.role || 'user';
+          setUserRole(role);
+        } else {
+          setUserRole(null);
+        }
+        
         setLoading(false);
 
-        const {
-          data: { subscription },
-        } = supabase.auth.onAuthStateChange(
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
           (_event: string, session: Session | null) => {
             setUser(session?.user ?? null);
+            
+            // Update role when auth state changes
+            if (session?.user) {
+              const role = session.user.user_metadata?.role || 'user';
+              setUserRole(role);
+            } else {
+              setUserRole(null);
+            }
+            
             setLoading(false);
           }
         );
@@ -49,12 +65,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     initializeAuth();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+  // Modified signIn to check for role
+  const signIn = async (email: string, password: string, requiredRole?: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+    
     if (error) throw error;
+    
+    // If a specific role is required, check if the user has that role
+    if (requiredRole) {
+      const userRole = data.user?.user_metadata?.role || 'user';
+      if (userRole !== requiredRole) {
+        // Sign out immediately if role doesn't match
+        await supabase.auth.signOut();
+        throw new Error(`Access denied. You don't have ${requiredRole} privileges.`);
+      }
+    }
   };
 
   const signOut = async () => {
@@ -124,7 +152,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signIn, 
         signOut, 
         signUp, 
-        getAllUsers
+        getAllUsers,
+        userRole
       }}
     >
       {children}

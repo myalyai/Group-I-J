@@ -1,30 +1,35 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   HomeIcon,
   DocumentTextIcon,
   UserIcon,
   ArrowLeftOnRectangleIcon,
-  PlusCircleIcon, // Add this import
+  PlusCircleIcon,
+  ClockIcon,
 } from '@heroicons/react/24/outline'
 import { useAuth } from '@/contexts/AuthContext'
 
 const navigation = [
   { name: 'Dashboard', href: '/user/dashboard', icon: HomeIcon },
   { name: 'My Listings', href: '/user/dashboard/listings', icon: DocumentTextIcon },
-  { name: 'New Product', href: '/user/dashboard/new-product', icon: PlusCircleIcon }, // Add this line
+  { name: 'New Product', href: '/user/dashboard/new-product', icon: PlusCircleIcon },
   { name: 'Profile', href: '/user/dashboard/profile', icon: UserIcon },
+  { name: 'History', href: '/user/dashboard/history', icon: ClockIcon },
 ]
 
 export default function UserSidebar() {
   const pathname = usePathname()
   const { signOut } = useAuth()
+  const router = useRouter()
 
   const handleLogout = async () => {
     try {
       await signOut()
+      // Explicitly redirect to user login page after logout
+      router.push('/user/login')
     } catch (error) {
       console.error('Error logging out:', error)
     }

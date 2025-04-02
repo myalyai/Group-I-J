@@ -14,10 +14,12 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await signIn(email, password)
+      // Pass 'admin' as the required role
+      await signIn(email, password, 'admin')
       router.push('/dashboard')
-    } catch (error) {
-      setError('Invalid login credentials')
+    } catch (error: any) {
+      console.error('Login error:', error);
+      setError(error.message || 'Invalid login credentials')
     }
   }
 
@@ -69,4 +71,4 @@ export default function LoginPage() {
       </div>
     </div>
   )
-} 
+}
