@@ -13,7 +13,20 @@ import {
 import { useAuth } from '@/contexts/AuthContext'
 import { useState } from 'react';
 
-const navigation = [
+// Add type definitions at the top of the file after imports
+type SubItem = {
+  name: string;
+  href: string;
+}
+
+type NavigationItem = {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  subItems?: SubItem[];
+}
+
+const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/user/dashboard', icon: HomeIcon },
   { name: 'My Listings', href: '/user/dashboard/listings', icon: DocumentTextIcon },
   {
@@ -60,7 +73,7 @@ export default function UserSidebar() {
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             const isExpanded = expandedItem === item.name;
-            const hasSubItems = 'subItems' in item;
+            const hasSubItems = 'subItems' in item && item.subItems !== undefined;
             const isSubItemActive = hasSubItems && item.subItems?.some(subItem => pathname === subItem.href);
 
             return (
@@ -88,7 +101,7 @@ export default function UserSidebar() {
                   <span>{item.name}</span>
                 </button>
                 
-                {hasSubItems && isExpanded && (
+                {hasSubItems && isExpanded && item.subItems && (
                   <div className="ml-9 mt-2 space-y-2">
                     {item.subItems.map((subItem) => (
                       <Link
