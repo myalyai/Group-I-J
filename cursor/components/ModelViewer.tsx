@@ -16,9 +16,9 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ file, onScreenshot }) => {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Scene setup with darker background
+    // Scene setup with lighter gray background
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1a1a1a); // Darker gray background
+    scene.background = new THREE.Color(0x2a2a2a); // Lighter gray background (changed from 0x1a1a1a)
 
     // Camera setup with better positioning
     const camera = new THREE.PerspectiveCamera(
@@ -40,18 +40,44 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ file, onScreenshot }) => {
     renderer.shadowMap.enabled = true;
     containerRef.current.appendChild(renderer.domElement);
 
-    // Improved lighting setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Enhanced lighting setup for better visibility
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 5, 5);
-    directionalLight.castShadow = true;
-    scene.add(directionalLight);
+    // Front light
+    const frontLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    frontLight.position.set(0, 0, 10);
+    frontLight.castShadow = true;
+    scene.add(frontLight);
 
-    const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
-    backLight.position.set(-5, 5, -5);
+    // Back light
+    const backLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    backLight.position.set(0, 0, -10);
+    backLight.castShadow = true;
     scene.add(backLight);
+
+    // Left light
+    const leftLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    leftLight.position.set(-10, 0, 0);
+    leftLight.castShadow = true;
+    scene.add(leftLight);
+
+    // Right light
+    const rightLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    rightLight.position.set(10, 0, 0);
+    rightLight.castShadow = true;
+    scene.add(rightLight);
+
+    // Top light
+    const topLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    topLight.position.set(0, 10, 0);
+    topLight.castShadow = true;
+    scene.add(topLight);
+
+    // Diagonal back light
+    const diagonalBackLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    diagonalBackLight.position.set(-5, 5, -5);
+    scene.add(diagonalBackLight);
 
     // Controls setup with enhanced rotation capabilities
     const controls = new OrbitControls(camera, renderer.domElement);
