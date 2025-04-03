@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function UserLoginPage() {
   const [email, setEmail] = useState('')
@@ -28,7 +29,7 @@ export default function UserLoginPage() {
       <div className="max-w-md w-full space-y-8 p-8 bg-gray-800 rounded-lg">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-            User Sign In
+            Sign in to your account
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -59,16 +60,22 @@ export default function UserLoginPage() {
             <div className="text-red-500 text-sm text-center">{error}</div>
           )}
 
-          <div>
+          <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              className="w-32 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
             >
               Sign in
             </button>
+            <Link
+              href="/user/register"
+              className="w-32 flex justify-center py-2 px-4 border border-purple-600 rounded-md shadow-sm text-sm font-medium text-purple-600 hover:bg-purple-600 hover:text-white transition-colors"
+            >
+              Sign up
+            </Link>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }

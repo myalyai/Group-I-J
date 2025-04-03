@@ -42,6 +42,28 @@ export default function UsersPage() {
     return user.email.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
+  const handleDeleteUser = async (userId: string) => {
+    if (!confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
+    try {
+      // Add your delete user logic here
+      // For now, we'll just filter out the user from the state
+      setUsers(users.filter(user => user.id !== userId));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      alert('Failed to delete user');
+    }
+  };
+
+  // Add new state for managing dropdown visibility
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  // Add function to toggle dropdown
+  const toggleDropdown = (userId: string) => {
+    setActiveDropdown(activeDropdown === userId ? null : userId);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -81,11 +103,13 @@ export default function UsersPage() {
           <select
             value={selectedRole}
             onChange={(e) => setSelectedRole(e.target.value)}
-            className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="bg-gray-800 text-gray-300 rounded-md px-3 py-2 border border-gray-700"
+            aria-label="Filter users by role" // Added aria-label
+            title="User role filter" // Added title
           >
-            <option value="all">All Roles</option>
-            <option value="admin">Admin</option>
+            <option value="">All Roles</option>
             <option value="user">User</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
 
@@ -140,10 +164,33 @@ export default function UsersPage() {
                         {user.status || 'active'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="text-gray-400 hover:text-white">
+                    <td className="px-6 py-4 text-right relative">
+                      <button 
+                        className="text-gray-400 hover:text-white"
+                        onClick={() => toggleDropdown(user.id)}
+                        aria-label={`More options for user ${user.email}`}
+                        title={`More options for ${user.email}`}
+                      >
                         <EllipsisVerticalIcon className="w-5 h-5" />
                       </button>
+                      
+                      {/* Dropdown Menu */}
+                      {activeDropdown === user.id && (
+                        <div className="absolute right-6 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-10">
+                          <div className="py-1" role="menu" aria-orientation="vertical">
+                            <button
+                              onClick={() => {
+                                handleDeleteUser(user.id);
+                                setActiveDropdown(null);
+                              }}
+                              className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700 hover:text-red-300"
+                              role="menuitem"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

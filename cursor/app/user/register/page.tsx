@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function UserRegisterPage() {
   const [email, setEmail] = useState('')
@@ -154,16 +155,22 @@ export default function UserRegisterPage() {
             </div>
           </div>
 
-          <div>
+          <div className="flex items-center justify-between">
+            <Link
+              href="/user/login"
+              className="w-32 flex justify-center py-2 px-4 border border-purple-600 rounded-md shadow-sm text-sm font-medium text-purple-600 hover:bg-purple-600 hover:text-white transition-colors"
+            >
+              Sign in
+            </Link>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              className="w-32 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
             >
-              Create Account
+              Sign up
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }
