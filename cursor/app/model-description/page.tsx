@@ -101,10 +101,16 @@ export default function ModelDescriptionPage() {
       <h1 className="text-2xl font-bold mb-4">3D Model Description Generator</h1>
       
       <div className="mb-4">
+        <label htmlFor="stl-file-input" className="block text-sm font-medium text-gray-300 mb-2">
+          Upload STL File
+        </label>
         <input
+          id="stl-file-input"
           type="file"
           accept=".stl"
           onChange={handleFileChange}
+          aria-label="Upload STL file"
+          title="Choose an STL file to upload"
           className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
         />
       </div>
