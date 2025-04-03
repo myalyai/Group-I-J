@@ -8,6 +8,7 @@ import type { Prompt } from '@/types/prompt'
 import { webhookConfig } from '@/config/webhook'
 import Loading from '@/components/Loading'
 import KeywordsResult from '@/components/KeywordsResult'
+import { useRouter } from 'next/navigation'
 
 export default function LandingPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
@@ -20,6 +21,17 @@ export default function LandingPage() {
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<string | null>(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getSession()
+      if (!data.session) {
+        router.push('/user/login')
+      }
+    }
+    checkAuth()
+  }, [router])
 
   useEffect(() => {
     async function fetchData() {
