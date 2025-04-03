@@ -56,6 +56,14 @@ export default function UsersPage() {
     }
   };
 
+  // Add new state for managing dropdown visibility
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  // Add function to toggle dropdown
+  const toggleDropdown = (userId: string) => {
+    setActiveDropdown(activeDropdown === userId ? null : userId);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -156,22 +164,33 @@ export default function UsersPage() {
                         {user.status || 'active'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right relative">
                       <button 
                         className="text-gray-400 hover:text-white"
+                        onClick={() => toggleDropdown(user.id)}
                         aria-label={`More options for user ${user.email}`}
                         title={`More options for ${user.email}`}
                       >
                         <EllipsisVerticalIcon className="w-5 h-5" />
                       </button>
-                      <button
-                        onClick={() => handleDeleteUser(user.id)}
-                        className="text-red-500 hover:text-red-400"
-                        aria-label={`Delete user ${user.email}`}
-                        title={`Delete user ${user.email}`}
-                      >
-                        Delete
-                      </button>
+                      
+                      {/* Dropdown Menu */}
+                      {activeDropdown === user.id && (
+                        <div className="absolute right-6 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-10">
+                          <div className="py-1" role="menu" aria-orientation="vertical">
+                            <button
+                              onClick={() => {
+                                handleDeleteUser(user.id);
+                                setActiveDropdown(null);
+                              }}
+                              className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700 hover:text-red-300"
+                              role="menuitem"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}
