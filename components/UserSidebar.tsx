@@ -26,6 +26,7 @@ type NavigationItem = {
   subItems?: SubItem[];
 }
 
+// Update the subItems array in the navigation constant
 const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/user/dashboard', icon: HomeIcon },
   { name: 'My Listings', href: '/user/dashboard/listings', icon: DocumentTextIcon },
@@ -35,7 +36,7 @@ const navigation: NavigationItem[] = [
     icon: PlusCircleIcon,
     subItems: [
       { name: 'Create New Product', href: '/user/dashboard/new-product' },
-      { name: 'Upload STL', href: '/user/dashboard/upload-stl' }
+      { name: 'Upload STL', href: '/model-description' } // Changed from /user/dashboard/upload-stl to /model-description
     ]
   },
   { name: 'Profile', href: '/user/dashboard/profile', icon: UserIcon },

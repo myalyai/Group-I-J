@@ -8,12 +8,14 @@ import {
   Users,
   MessageSquare,
   LogOut,
-  Database
+  Database,
+  BarChart // Added BarChart icon for Analytics
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart }, // Added Analytics navigation item
   { name: 'Prompts', href: '/dashboard/prompts', icon: MessageSquare },
   { name: 'Users', href: '/dashboard/users', icon: Users },
   { name: 'Platforms', href: '/dashboard/platforms', icon: Database },
